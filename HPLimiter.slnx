@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="HPLimiter.csproj" Id="f487916e-affc-45d8-97aa-853548a16d0d">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>
