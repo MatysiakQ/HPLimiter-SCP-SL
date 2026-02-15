@@ -2,7 +2,6 @@
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
-using MEC;
 using System;
 
 namespace HpLimiter
@@ -47,26 +46,19 @@ namespace HpLimiter
             RoleTypeId role = ev.Player.Role.Type;
             if (!Config.ScpConfig.TryGetValue(role, out ScpStatEntry entry)) return;
 
-            // Mały delay żeby gra zdążyła ustawić domyślne HP przed nami
-            Timing.CallDelayed(0.3f, () =>
+            if (entry.Health > 0f)
             {
-                if (ev.Player == null || !ev.Player.IsAlive) return;
-                if (ev.Player.Role.Type != role) return;
+                ev.Player.MaxHealth = entry.Health;
+                ev.Player.Health = entry.Health;
+            }
 
-                if (entry.Health > 0f)
-                {
-                    ev.Player.MaxHealth = entry.Health;
-                    ev.Player.Health = entry.Health;
-                }
+            if (entry.HumeShield > 0f)
+            {
+                ev.Player.HumeShield = entry.HumeShield;
+                ev.Player.MaxHumeShield = entry.HumeShield;
+            }
 
-                if (entry.HumeShield > 0f)
-                {
-                    ev.Player.HumeShield = entry.HumeShield;
-                    ev.Player.MaxHumeShield = entry.HumeShield;
-                }
-
-                Log.Debug($"[HpLimiter] {ev.Player.Nickname} ({role}) -> HP: {entry.Health}, HS: {entry.HumeShield}");
-            });
+            Log.Debug($"[HpLimiter] {ev.Player.Nickname} ({role}) -> HP: {entry.Health}, HS: {entry.HumeShield}");
         }
     }
 }
